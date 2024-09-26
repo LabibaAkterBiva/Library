@@ -1,0 +1,73 @@
+<!-- @format -->
+
+{% extends "core/base.html" %} {% block head_title %} Library Management {% endblock %}
+{% block body %}
+<section>
+  <div class="hero bg-base-200 py-20">
+    <div class="hero-content text-center">
+      <div class="max-w-xl">
+        <h1 class="text-5xl font-bold">Welcome to Library</h1>
+        <p class="py-6">
+          Immerse yourself in a world of words! Our library app offers ebooks,
+          audiobooks, and even lets you request physical copies. Browse a vast
+          collection, delve into captivating stories, and find hidden gems or
+          revisit classics. Download today and unlock a universe of literary
+          adventures, wherever you go.
+        </p>
+        <a href='{% url "profile" %}' class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </div>
+  <div class="stats bg-primary text-primary-content flex justify-center">
+  
+    <div class="center my-2">
+      <div class="stat-title">Create account</div>
+      <div class="stat-value">GET $500</div>
+      <div class="stat-title">In You account</div>
+    </div>
+    
+  </div>
+  <h1 class="p-4 text-3xl font-bold flex justify-start gap-2 items-center">
+    Total Books: <kbd class="kbd kbd-md">{{books|length}}</kbd>
+  </h1>
+  <div class="grid grid-cols-6">
+    <div class="col-span-1">
+      <ul class="menu bg-base-200 w-56 rounded-box">
+        <li>
+          <h2 class="menu-title">All Category</h2>
+          <ul>
+            {% for cat in categories %}
+            <li><a href='{% url "filter_home" cat.slug %}'> {{cat.name}} </a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="col-span-5 grid grid-cols-4 gap-4">
+      {% for book in books %}
+      <div
+        class="card card-compact w-full bg-base-100 shadow-xl border border-gray-700"
+      >
+        <figure>
+          <img class="max-h-40" src="{{book.image.url}}" alt="{{book.title}}" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            {{book.title}}
+            <div class="badge badge-secondary">{{book.category.name}}</div>
+          </h2>
+          <h2 class="text-base font-semibold">
+            Borrowing Price:
+            <kbd class="kbd kbd-md">${{book.price}}</kbd>
+          </h2>
+          <p>{{book.description|truncatewords:10}}</p>
+          <div class="card-actions justify-end">
+            <a href='{% url "book_details" book.id %}' class="btn btn-primary btn-sm">See Details</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

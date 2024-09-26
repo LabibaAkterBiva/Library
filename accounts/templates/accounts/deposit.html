@@ -1,0 +1,44 @@
+
+{% extends "core/base.html" %} {% block head_title %} Depost Money {% endblock %} {% block body %}
+<section>
+  {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+  <div role="alert" class="alert alert-error">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="stroke-current shrink-0 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <span>Error! {{error}}</span>
+  </div>
+  {% endfor %} {% endif %}
+  <div class="px-3 py-4 my-6">
+    <h1 class="font-bold text-3xl text-center pb-5">Deposit Money</h1>
+    <div class="w-full mt-10 flex justify-center">
+      <form novalidate method="post" class="w-2/5">
+        {% csrf_token %} {% for hf in form.hidden_fields %} {{hf.errors}} {{hf}}
+        {% endfor %} {% for fm in form %}
+        <div class='py-3'>
+          <label
+            class="input input-bordered flex items-center gap-2"
+            for="{{fm.id_for_label}}"
+          >
+            {{fm.label}} {{fm}}
+          </label>
+          {% if fm.errors %} {% for error in fm.errors %}
+          <p class="text-red-600 text-sm italic pb-2">{{error}}</p>
+          {% endfor %} {% endif %} {% endfor %}
+        </div>
+        <button class="btn btn-info" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

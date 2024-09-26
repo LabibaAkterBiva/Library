@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+{% block head_title %}
+User Profile
+{% endblock  %}
+{% block body %}
+<section>
+    <div class='flex justify-start flex-col w-full'>
+        <h1 class='font-bold text-3xl pb-5'>
+            Name: {{user.first_name}} {{user.last_name}}
+        </h1>
+    <h1 class='font-bold text-3xl pb-5 '>
+            Balance: {{user.account.balance}}
+        </h1>
+    </div>
+    <h2 class='text-2xl font-semibold'>
+        Total books borrowed ({{borrow_list|length}})
+    </h2>
+    <div class="overflow-x-auto">
+        <table class="table">
+          <!-- head -->
+          <thead>
+            <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Book Name</th>
+            <th>Borrow Price</th>
+            <th>Balance after borrow</th>
+            <th>Borrow Date</th>
+            <th>Return</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- row 1 -->
+            {% for borrow in borrow_list %}
+            <tr>
+              <th>
+                <label>
+                    {{borrow.id}}
+                </label>
+              </th>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="mask mask-squircle w-12 h-12">
+                      <img src="{{borrow.book.image.url}}" alt="Avatar Tailwind CSS Component" />
+                    </div>
+                  </div>
+                  <div>
+                    
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="font-bold">{{borrow.book.title}}</div>
+              </td>
+              <td>
+                {{borrow.book.price}}
+              </td>
+              <td>{{borrow.balance_after_borrow}}</td>
+              <th>
+                {{borrow.created_on}}
+              </th>
+              <th>
+                {% if borrow.is_returned %}
+                RETURNED
+                {% else %}
+                <form action='{% url "return_book" borrow.id %}' method='post'>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Return</button>
+                </form>
+                {% endif %}
+              </th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+</section>
+{% endblock  %}
