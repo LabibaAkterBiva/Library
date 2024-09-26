@@ -53,7 +53,8 @@ class DepositMoneyView(CreateView):
     form_class = DepositMoneyForm
     model = Account
     template_name = 'accounts/deposit.html'
-    success_url = reverse_lazy('profile')
+    def get_success_url(self) -> str:
+        return reverse_lazy('profile')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
